@@ -36,6 +36,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/chats', [ChatController::class, 'index'])->name('chats.index');
+    Route::post('/chats', [ChatController::class, 'store'])->name('chats.store');
+    Route::get('/chats/{chat}', [ChatController::class, 'show'])->name('chats.show');
 });
 
 require __DIR__.'/auth.php';

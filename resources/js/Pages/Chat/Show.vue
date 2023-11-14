@@ -1,21 +1,7 @@
 <template>
     <div class="flex">
         <div class="w-3/4 p-4 mr-2 border border-sky-800 bg-white rounded-lg">
-            <h3 class="font-semibold text-lg mb-6 mx-auto w-20">
-                Chat list.
-            </h3>
-            <div v-if="chats">
-                <div v-for="chat in chats" :key="chat.id" class="mb-2 pb-2 border-b border-gray-300 flex justify-between">
-                    <Link :href="route('chats.show', chat.id)" class="flex justify-between w-full">
-                        <span>
-                            {{ chat.id }}
-                        </span>
-                        <span>
-                            {{ chat.title ?? 'Your chat' }}
-                        </span>
-                    </Link>
-                </div>
-            </div>
+            {{ chat }}
         </div>
         <div class="w-1/4 p-4 ml-2 border border-sky-800 bg-white rounded-lg">
             <h3 class="font-semibold text-lg mb-6 mx-auto w-20">
@@ -36,22 +22,16 @@
 </template>
 
 <script>
-import { Link } from '@inertiajs/vue3';
 import My from '@/Layouts/My.vue';
 export default {
-    name: 'Index',
+    name: 'Show',
     layout: My,
     props: [
         'users',
-        'chats',
+        'chat',
     ],
-    components: {
-        Link
-    },
     methods: {
-        store(targetUserId) {
-            this.$inertia.post('/chats', { title: null, users: [targetUserId] });
-        }
+        
     }
 }
 </script>
