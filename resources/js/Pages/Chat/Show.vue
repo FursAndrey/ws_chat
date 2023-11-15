@@ -1,7 +1,6 @@
 <template>
     <div class="flex">
         <div class="w-3/4 p-4 mr-2 border border-sky-800 bg-white rounded-lg">
-            {{ chat }}
             <h3 class="font-semibold text-lg mb-6 mx-auto w-20">
                 {{ chat.title ?? 'Your chat' }}
             </h3>
@@ -14,11 +13,17 @@
                     <span @click="store()" class="ml-4 px-3 py-2 bg-sky-600 text-white rounded-lg cursor-pointer">Send</span>
                 </div>
             </div>
-            <div>
-
+            <div v-if="messages">
+                <div v-for="message in messages" :key="message.id" :class="['m-3 p-3 w-2/6 rounded-xl border', message.is_owner ? 'bg-sky-50 border-sky-400' : 'bg-green-50 border-green-400 ml-auto']">
+                    <div class="text-xs italic mb-2 text-left w-max ml-auto">
+                        <div>{{ message.user_name }}</div>
+                        <div>{{ message.time }}</div>
+                    </div>
+                    <div>{{ message.body }}</div>
+                </div>
             </div>
         </div>
-        <div class="w-1/4 p-4 ml-2 border border-sky-800 bg-white rounded-lg">
+        <div class="w-1/4 p-4 ml-2 border border-sky-800 bg-white rounded-lg h-fit">
             <h3 class="font-semibold text-lg mb-6 mx-auto w-20">
                 User list.
             </h3>
@@ -42,6 +47,7 @@ export default {
     props: [
         'users',
         'chat',
+        'messages',
     ],
     data() {
         return {
@@ -71,6 +77,8 @@ export default {
                     user_ids: this.userIds
                 }
             ).then(res => {
+                this.body = '';
+                this.messages.unshift(res.data);
                 console.log(res);
             });
         }
