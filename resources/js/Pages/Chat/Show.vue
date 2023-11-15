@@ -1,7 +1,7 @@
 <template>
     <div class="flex">
         <div class="w-3/4 p-4 mr-2 border border-sky-800 bg-white rounded-lg">
-            <h3 class="font-semibold text-lg mb-6 mx-auto w-20">
+            <h3 class="font-semibold text-lg mb-6 mx-auto w-1/2 text-center">
                 {{ chat.title ?? 'Your chat' }}
             </h3>
             <div class="mb-6">
