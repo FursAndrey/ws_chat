@@ -10,7 +10,6 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Stmt\TryCatch;
 
 class ChatController extends Controller
 {
@@ -19,7 +18,7 @@ class ChatController extends Controller
         $users = User::where('id', '!=', auth()->id())->get();
         $users = UserResource::collection($users)->resolve();
 
-        $chats = auth()->user()->chats()->get();
+        $chats = auth()->user()->chats()->has('messages')->get();
         $chats = ChatResource::collection($chats)->resolve();
 
         return inertia('Chat/Index', compact('users', 'chats'));
@@ -51,19 +50,19 @@ class ChatController extends Controller
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
+
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
         }
 
-        $chat = ChatResource::make($chat)->resolve();
-
-        $users = User::where('id', '!=', auth()->id())->get();
-        $users = UserResource::collection($users)->resolve();
-
-        return inertia('Chat/Show', compact('chat', 'users'));
+        return redirect()->route('chats.show', $chat->id);
     }
 
     public function show(Chat $chat)
     {
-        $users = User::where('id', '!=', auth()->id())->get();
+        $users = $chat->users()->get();
         $users = UserResource::collection($users)->resolve();
 
         $chat = ChatResource::make($chat)->resolve();
