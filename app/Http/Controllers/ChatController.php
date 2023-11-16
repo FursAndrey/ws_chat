@@ -68,6 +68,7 @@ class ChatController extends Controller
         $messages = $chat->messages()->with('user')->orderBy('id', 'DESC')->get();
         $messages = MessageResource::collection($messages)->resolve();
 
+        $chat->unreadableMessages()->update(['is_read' => true]);
         $chat = ChatResource::make($chat)->resolve();
 
         return inertia('Chat/Show', compact('chat', 'users', 'messages'));

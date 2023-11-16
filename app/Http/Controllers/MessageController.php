@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SendUnreadableMessagesCountEvent;
 use App\Events\StoreMessageEvent;
 use App\Http\Requests\Message\StoreRequest;
 use App\Http\Resources\MessageResource;
@@ -33,6 +34,12 @@ class MessageController extends Controller
                     'chat_id' => $data['chat_id'],
                     'message_id' => $message->id,
                 ]);
+
+                $countMessages = MessageStatus::where('chat_id', '=', $data['chat_id'])
+                    ->where('user_id', '=', $user_id)
+                    ->where('is_read', false)
+                    ->count();
+                broadcast(new SendUnreadableMessagesCountEvent($countMessages, $data['chat_id'], $user_id))->toOthers();
             }
 
             broadcast(new StoreMessageEvent($message))->toOthers();

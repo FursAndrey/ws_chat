@@ -15,7 +15,7 @@
                                 {{ chat.title ?? 'Your chat' }}
                             </span>
                         </div>
-                        <div v-if="chat.unreadable_messages_count > 0" class="px-3 py-1 bg-amber-300 rounded-full text-white">
+                        <div v-if="chat.unreadable_messages_count > 0" class="px-2 py-1 bg-green-500 rounded-full text-white text-xs">
                             {{ chat.unreadable_messages_count }}
                         </div>
                     </Link>
@@ -75,6 +75,16 @@ export default {
             user_ids: [],
             title: null,
         }
+    },
+    created() {
+        window.Echo.channel('user-channel-' + this.$page.props.auth.user.id)
+        .listen('.message-status', res => {
+            this.chats.filter( chat => {
+                if (chat.id === res.chatId) {
+                    chat.unreadable_messages_count = res.countMessages;
+                }
+            });
+        })
     },
     components: {
         Link
