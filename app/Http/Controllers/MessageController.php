@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\StoreMessageEvent;
 use App\Http\Requests\Message\StoreRequest;
 use App\Http\Resources\MessageResource;
 use App\Models\Message;
@@ -33,6 +34,8 @@ class MessageController extends Controller
                     'message_id' => $message->id,
                 ]);
             }
+
+            broadcast(new StoreMessageEvent($message))->toOthers();
 
             DB::commit();
         } catch (Exception $e) {

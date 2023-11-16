@@ -54,6 +54,12 @@ export default {
             body: '',
         }
     },
+    created() {
+        window.Echo.channel('store-message-channel-' + this.chat.id)
+        .listen('.store-message', res => {
+            this.messages.unshift(res.message);
+        })
+    },
     computed: {
         userIds() {
             return this.users.map(
@@ -79,7 +85,6 @@ export default {
             ).then(res => {
                 this.body = '';
                 this.messages.unshift(res.data);
-                console.log(res);
             });
         }
     }
