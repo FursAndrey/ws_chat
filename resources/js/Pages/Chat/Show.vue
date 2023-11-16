@@ -58,6 +58,10 @@ export default {
         window.Echo.channel('store-message-channel-' + this.chat.id)
         .listen('.store-message', res => {
             this.messages.unshift(res.message);
+
+            if (this.$page.url === '/chats/' + this.chat.id) {   
+                axios.put('/messageStatus', { user_id: this.$page.props.auth.user.id, message_id: res.message.id })
+            }
         })
     },
     computed: {
