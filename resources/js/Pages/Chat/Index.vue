@@ -7,12 +7,17 @@
             <div v-if="chats">
                 <div v-for="chat in chats" :key="chat.id" class="mb-2 pb-2 border-b border-gray-300 flex justify-between">
                     <Link :href="route('chats.show', chat.id)" class="flex justify-between w-full">
-                        <span>
-                            {{ chat.id }}
-                        </span>
-                        <span>
-                            {{ chat.title ?? 'Your chat' }}
-                        </span>
+                        <div>
+                            <span>
+                                {{ chat.id }}
+                            </span>
+                            <span class="ml-4">
+                                {{ chat.title ?? 'Your chat' }}
+                            </span>
+                        </div>
+                        <div v-if="chat.unreadable_messages_count > 0" class="px-3 py-1 bg-amber-300 rounded-full text-white">
+                            {{ chat.unreadable_messages_count }}
+                        </div>
                     </Link>
                 </div>
             </div>
