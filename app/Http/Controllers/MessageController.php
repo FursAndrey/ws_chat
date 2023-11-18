@@ -39,7 +39,7 @@ class MessageController extends Controller
                     ->where('user_id', '=', $user_id)
                     ->where('is_read', false)
                     ->count();
-                broadcast(new SendUnreadableMessagesCountEvent($countMessages, $data['chat_id'], $user_id))->toOthers();
+                broadcast(new SendUnreadableMessagesCountEvent($countMessages, $data['chat_id'], $user_id, $message))->toOthers();
             }
 
             broadcast(new StoreMessageEvent($message))->toOthers();

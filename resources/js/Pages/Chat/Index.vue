@@ -5,18 +5,27 @@
                 Chat list.
             </h3>
             <div v-if="chats">
-                <div v-for="chat in chats" :key="chat.id" class="mb-2 pb-2 border-b border-gray-300 flex justify-between">
-                    <Link :href="route('chats.show', chat.id)" class="flex justify-between w-full">
-                        <div>
-                            <span>
-                                {{ chat.id }}
-                            </span>
-                            <span class="ml-4">
-                                {{ chat.title ?? 'Your chat' }}
-                            </span>
+                <div v-for="chat in chats" :key="chat.id" class="mb-2 pb-2 border-b border-gray-300 w-full">
+                    <Link :href="route('chats.show', chat.id)">
+                        <div class="flex justify-between w-full mb-2">
+                            <div>
+                                <span>
+                                    {{ chat.id }}
+                                </span>
+                                <span class="ml-4 font-semibold">
+                                    {{ chat.title ?? 'Your chat' }}
+                                </span>
+                            </div>
+                            <div v-if="chat.unreadable_messages_count > 0" class="px-2 py-1 bg-green-500 rounded-full text-white text-xs">
+                                {{ chat.unreadable_messages_count }}
+                            </div>
                         </div>
-                        <div v-if="chat.unreadable_messages_count > 0" class="px-2 py-1 bg-green-500 rounded-full text-white text-xs">
-                            {{ chat.unreadable_messages_count }}
+                        <div :class="['ml-10 w-11/12 text-zinc-500 p-2', chat.unreadable_messages_count > 0 ? 'bg-gray-100' : '']">
+                            <div class="flex justify-between w-full">
+                                <div class="text-xs w-max">{{ chat.last_message.user_name }}</div>
+                                <div class="text-xs italic w-max">{{ chat.last_message.time }}</div>
+                            </div>
+                            <div>{{ chat.last_message.body }}</div>
                         </div>
                     </Link>
                 </div>
@@ -82,6 +91,7 @@ export default {
             this.chats.filter( chat => {
                 if (chat.id === res.chatId) {
                     chat.unreadable_messages_count = res.countMessages;
+                    chat.last_message = res.message;
                 }
             });
         })

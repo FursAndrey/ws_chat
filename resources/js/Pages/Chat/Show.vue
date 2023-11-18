@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div v-if="messages">
-                <div v-for="message in messages" :key="message.id" :class="['m-3 p-3 w-2/6 rounded-xl border', message.is_owner ? 'bg-sky-50 border-sky-400' : 'bg-green-50 border-green-400 ml-auto']">
+                <div v-for="message in messages" :key="message.id" :class="['m-3 p-3 w-max rounded-xl border', message.is_owner ? 'bg-sky-50 border-sky-400' : 'bg-green-50 border-green-400 ml-auto']">
                     <div class="text-xs italic mb-2 text-left w-max ml-auto">
                         <div>{{ message.user_name }}</div>
                         <div>{{ message.time }}</div>

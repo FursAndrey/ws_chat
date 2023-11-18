@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Http\Resources\MessageResource;
 use App\Http\Resources\OtherUsersMessageResource;
 use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
@@ -20,14 +21,16 @@ class SendUnreadableMessagesCountEvent implements ShouldBroadcastNow
     private int $countMessages;
     private int $chatId;
     private int $userId;
+    private Message $message;
     /**
      * Create a new event instance.
      */
-    public function __construct(int $countMessages, int $chatId, int $userId)
+    public function __construct(int $countMessages, int $chatId, int $userId, Message $message)
     {
         $this->countMessages = $countMessages;
         $this->chatId = $chatId;
         $this->userId = $userId;
+        $this->message = $message;
     }
 
     /**
@@ -60,6 +63,7 @@ class SendUnreadableMessagesCountEvent implements ShouldBroadcastNow
         return [
             'countMessages' => $this->countMessages,
             'chatId' => $this->chatId,
+            'message' => MessageResource::make($this->message)->resolve(),
         ];
     }
 }

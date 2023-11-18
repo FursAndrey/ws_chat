@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Chat extends Model
 {
@@ -33,5 +34,12 @@ class Chat extends Model
         return $this->hasMany(MessageStatus::class, 'chat_id', 'id')
             ->where('user_id', '=', auth()->id())
             ->where('is_read', false);
+    }
+
+    public function lastMessage(): HasOne
+    {
+        return $this->hasOne(Message::class, 'chat_id', 'id')
+            ->ofMany('id', 'MAX')
+            ->with('user');
     }
 }
