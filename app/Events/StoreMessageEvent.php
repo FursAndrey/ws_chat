@@ -34,7 +34,7 @@ class StoreMessageEvent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('store-message-channel-' . $this->message->chat_id),
+            new PrivateChannel('store-message-channel-' . $this->message->chat_id),
         ];
     }
     

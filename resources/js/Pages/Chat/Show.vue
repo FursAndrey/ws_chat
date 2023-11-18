@@ -55,7 +55,7 @@ export default {
         }
     },
     created() {
-        window.Echo.channel('store-message-channel-' + this.chat.id)
+        window.Echo.private('store-message-channel-' + this.chat.id)
         .listen('.store-message', res => {
             this.messages.unshift(res.message);
 

@@ -41,7 +41,7 @@ class SendUnreadableMessagesCountEvent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('user-channel-' . $this->userId),
+            new PrivateChannel('user-channel-' . $this->userId),
         ];
     }
     

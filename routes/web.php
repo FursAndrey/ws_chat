@@ -39,9 +39,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/chats', [ChatController::class, 'index'])->name('chats.index');
     Route::post('/chats', [ChatController::class, 'store'])->name('chats.store');
-    Route::get('/chats/{chat}', [ChatController::class, 'show'])->name('chats.show');
     Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
     Route::put('/messageStatus', [MessageStatusController::class, 'update'])->name('message_status.update');
+
+    Route::middleware('privateChat')->group(function () {
+        Route::get('/chats/{chat}', [ChatController::class, 'show'])->name('chats.show');
+    });
 });
 
 require __DIR__.'/auth.php';

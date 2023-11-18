@@ -86,7 +86,7 @@ export default {
         }
     },
     created() {
-        window.Echo.channel('user-channel-' + this.$page.props.auth.user.id)
+        window.Echo.private('user-channel-' + this.$page.props.auth.user.id)
         .listen('.message-status', res => {
             this.chats.filter( chat => {
                 if (chat.id === res.chatId) {
