@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\MessageStatusController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +36,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/chats', [ChatController::class, 'index'])->name('chats.index');
+    Route::post('/chats', [ChatController::class, 'store'])->name('chats.store');
+    Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
+    Route::put('/messageStatus', [MessageStatusController::class, 'update'])->name('message_status.update');
+
+    Route::middleware('privateChat')->group(function () {
+        Route::get('/chats/{chat}', [ChatController::class, 'show'])->name('chats.show');
+    });
 });
 
 require __DIR__.'/auth.php';
