@@ -21,6 +21,9 @@
                     </div>
                     <div>{{ message.body }}</div>
                 </div>
+                <div class="mx-auto px-3 py-2 bg-blue-500 text-white rounded-lg cursor-pointer text-center w-max" @click="getMessages()" v-if="this.page < lastPage">
+                    load
+                </div>
             </div>
         </div>
         <div class="w-1/4 p-4 ml-2 border border-sky-800 bg-white rounded-lg h-fit">
@@ -48,10 +51,12 @@ export default {
         'users',
         'chat',
         'messages',
+        'lastPage',
     ],
     data() {
         return {
             body: '',
+            page: 1,
         }
     },
     created() {
@@ -90,6 +95,14 @@ export default {
                 this.body = '';
                 this.messages.unshift(res.data);
             });
+        },
+
+        getMessages() {
+            axios.get(`/chats/${this.chat.id}?page=${++this.page}`)
+                .then(res => {
+                    this.$page.props.lastPage = res.data.lastPage;
+                    this.messages.push(...res.data.messages);
+                });
         }
     }
 }

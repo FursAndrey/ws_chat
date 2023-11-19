@@ -18,7 +18,7 @@ class ChatResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'users' => $this->users,
-            'last_message' => MessageResource::make($this->lastMessage)->resolve(),
+            'last_message' => isset($this->lastMessage) ? MessageResource::make($this->lastMessage)->resolve() : null,
             'unreadable_messages_count' => $this->unreadable_messages_count,
         ];
     }

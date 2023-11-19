@@ -68,14 +68,30 @@ class ChatController extends Controller
 
     public function show(Chat $chat)
     {
+        $page = request('page') ?? 1;
+
+        $messages = $chat->messages()
+            ->with('user')
+            ->orderBy('id', 'DESC')
+            ->paginate(5, '*', 'page', $page);
+        $lastPage = $messages->LastPage();
+        $messages = MessageResource::collection($messages)->resolve();
+
+        //возвращаем сообщения, если идет запрос дополнительных сообщений для других страниц
+        if ($page !== 1) {
+            return response()->json([
+                'messages' => $messages,
+                'lastPage' => $lastPage,
+            ]);
+            return $messages;
+        }
+
         $users = $chat->users()->get();
         $users = UserResource::collection($users)->resolve();
-        $messages = $chat->messages()->with('user')->orderBy('id', 'DESC')->get();
-        $messages = MessageResource::collection($messages)->resolve();
 
         $chat->unreadableMessages()->update(['is_read' => true]);
         $chat = ChatResource::make($chat)->resolve();
 
-        return inertia('Chat/Show', compact('chat', 'users', 'messages'));
+        return inertia('Chat/Show', compact('chat', 'users', 'messages', 'lastPage'));
     }
 }
