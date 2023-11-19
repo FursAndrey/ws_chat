@@ -22,7 +22,7 @@ class ChatController extends Controller
         $chats = auth()->user()
             ->chats()
             ->has('messages')
-            ->with('lastMessage')
+            ->with(['lastMessage', 'chatWith'])
             ->withCount('unreadableMessages')
             ->get();
         $chats = ChatResource::collection($chats)->resolve();
